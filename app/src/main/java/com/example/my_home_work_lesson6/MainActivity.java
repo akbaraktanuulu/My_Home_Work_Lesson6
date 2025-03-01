@@ -2,17 +2,12 @@ package com.example.my_home_work_lesson6;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.AbsListView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
@@ -24,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         EdgeToEdge.enable(this);
@@ -35,8 +31,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.btnOpen.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, MainActivity2.class);
-            startActivity(intent);
+            if (check()) {
+                Toast.makeText(MainActivity.this,"Вы успешно авторизовались!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(MainActivity.this,"Вы вели неправильный логин или пароль!", Toast.LENGTH_SHORT).show();
+            }
         });
+        }
+
+        private boolean check () {
+            String tex1 = binding.email.getText().toString();
+            String tex2 = binding.password.getText().toString();
+            return tex1.equals("admin") && tex2.equals("admin");
+        }
     }
-}

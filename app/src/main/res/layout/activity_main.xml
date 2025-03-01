@@ -43,17 +43,15 @@
     </LinearLayout>
 
     <TextView
-        android:layout_marginLeft="27dp"
-        android:layout_marginTop="274dp"
         android:layout_width="135dp"
         android:layout_height="27dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginTop="274dp"
         android:text="Forgot Password?"
         android:textColor="@color/textRed"
         android:textSize="15dp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="@+id/loginPlace"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnOpen"
