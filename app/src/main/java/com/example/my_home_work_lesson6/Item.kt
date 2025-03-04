@@ -1,18 +1,14 @@
-package com.example.my_home_work_lesson6;
+package com.example.my_home_work_lesson6
 
-public class Item {
-    private String title;
-    private String description;
-    private int imageResId; // Stores drawable resource ID
+class Item(
+    @JvmField val title: String, val description: String, // Stores drawable resource ID
+    @JvmField val imageResId: Int
+) {
+    inner class Title {
+        fun toLowerCase() {
 
-    public Item(String title, String description, int imageResId) {
-        this.title = title;
-        this.description = description;
-        this.imageResId = imageResId;
+        }
+
     }
-
-    public String getTitle() { return title; }
-    public String getDescription() { return description; }
-    public int getImageResId() { return imageResId; }
 }
 

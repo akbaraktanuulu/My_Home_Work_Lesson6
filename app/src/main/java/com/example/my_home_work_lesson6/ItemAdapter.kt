@@ -1,74 +1,57 @@
-package com.example.my_home_work_lesson6;
+package com.example.my_home_work_lesson6
 
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import java.util.List;
-public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 
-    private List<Item> itemList;
-    private OnItemClickListener onItemClickListener;
-
+class ItemAdapter // Constructor
+    (private var itemList: List<Item>, private val onItemClickListener: OnItemClickListener?) :
+    RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
     // Interface for item click listener
-    public interface OnItemClickListener {
-        void onItemClick(int position);
+    fun interface OnItemClickListener {
+        fun onItemClick(position: Int)
     }
 
-    // Constructor
-    public ItemAdapter(List<Item> itemList, OnItemClickListener onItemClickListener) {
-        this.itemList = itemList;
-        this.onItemClickListener = onItemClickListener;
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
+        return ItemViewHolder(itemView)
     }
 
-    @Override
-    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
-        return new ItemViewHolder(itemView);
-    }
-
-    @Override
-    public void onBindViewHolder(ItemViewHolder holder, int position) {
-        Item item = itemList.get(position);
-        holder.burgerText.setText(item.getTitle());
-        holder.burgerIcon.setImageResource(item.getImageResId());
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+        val item = itemList[position]
+        holder.burgerText.setText(item.title)
+        holder.burgerIcon.setImageResource(item.imageResId)
 
         if (position == 0) {
-            holder.burgerIcon.setColorFilter(Color.parseColor("#FF0000"), PorterDuff.Mode.SRC_IN); // Red tint for the first item
+            holder.burgerIcon.setColorFilter(
+                Color.parseColor("#FF0000"),
+                PorterDuff.Mode.SRC_IN
+            ) // Red tint for the first item
         } else {
-            holder.burgerIcon.setColorFilter(null);
+            holder.burgerIcon.colorFilter = null
         }
-        holder.itemView.setOnClickListener(v -> {
-            if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(position);
-            }
-        });
-    }
-
-    @Override
-    public int getItemCount() {
-        return itemList.size();
-    }
-
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
-        ImageView burgerIcon;
-        TextView burgerText;
-
-        public ItemViewHolder(View itemView) {
-            super(itemView);
-            burgerIcon = itemView.findViewById(R.id.burgerIcon);
-            burgerText = itemView.findViewById(R.id.burgerText);
+        holder.itemView.setOnClickListener { v: View? ->
+            onItemClickListener?.onItemClick(position)
         }
     }
 
-    public void updateList(List<Item> newList) {
-        this.itemList = newList;
-        notifyDataSetChanged(); // Refresh RecyclerView
+    override fun getItemCount(): Int {
+        return itemList.size
+    }
+
+    inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var burgerIcon: ImageView = itemView.findViewById(R.id.burgerIcon)
+        var burgerText: TextView = itemView.findViewById(R.id.burgerText)
+    }
+
+    fun updateList(newList: List<Item>) {
+        this.itemList = newList
+        notifyDataSetChanged() // Refresh RecyclerView
     }
 }
-

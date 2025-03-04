@@ -1,56 +1,44 @@
-package com.example.my_home_work_lesson6;
+package com.example.my_home_work_lesson6
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.my_home_work_lesson6.databinding.ItemFoodHolderBinding
+import java.util.LinkedList
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+class FoodAdaptor(private val foods: LinkedList<Food>) : RecyclerView.Adapter<FoodAdaptor.FoodViewHolder>() {
 
-import com.bumptech.glide.Glide;
-import com.example.my_home_work_lesson6.databinding.ItemFoodHolderBinding;
-
-import java.util.LinkedList;
-
-public class FoodAdaptor extends RecyclerView.Adapter<FoodAdaptor.FoodViweHolder> {
-
-    private LinkedList<Food> foods;
-    public FoodAdaptor(LinkedList<Food> foods){
-        this.foods = foods;
+    // Создание ViewHolder'а
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FoodViewHolder {
+        val binding = ItemFoodHolderBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return FoodViewHolder(binding)
     }
 
-    @NonNull
-    @Override
-    public FoodViweHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemFoodHolderBinding binding = ItemFoodHolderBinding.
-                inflate(LayoutInflater.from(parent.getContext()),parent,false);
-        return new FoodViweHolder(binding);
+    // Привязка данных к ViewHolder'у
+    override fun onBindViewHolder(holder: FoodViewHolder, position: Int) {
+        holder.bind(foods[position])
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull FoodViweHolder holder, int position) {
-        holder.bind(foods.get(position));
+    // Возвращает количество элементов в списке
+    override fun getItemCount(): Int {
+        return foods.size
     }
 
-    @Override
-    public int getItemCount() {
-        return foods.size();
-    }
+    // ViewHolder для отображения элемента списка
+    class FoodViewHolder(private val binding: ItemFoodHolderBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-
-    public static class FoodViweHolder extends RecyclerView.ViewHolder {
-        private ItemFoodHolderBinding binding;
-
-
-        public FoodViweHolder(ItemFoodHolderBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-
-        }
-
-        public void bind(Food food) {
-           binding.tvName.setText(food.getName());
-            Glide.with(super.itemView.getContext()).load(food.getAvatar()).into(binding.imageView);
+        // Метод для привязки данных к элементам интерфейса
+        fun bind(food: Food) {
+            binding.tvName.text = food.name
+            Glide.with(itemView.context)
+                .load(food.avatar)
+                .into(binding.imageView)
         }
     }
 }

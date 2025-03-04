@@ -1,88 +1,71 @@
-package com.example.my_home_work_lesson6;
+package com.example.my_home_work_lesson6
 
-import android.graphics.Color;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
-import java.util.List;
-public class ItemAdapter2 extends RecyclerView.Adapter<ItemAdapter2.ViewHolder> {
-    private final List<Item2> itemList;
-    private final OnItemClickListener onItemClickListener;
+import android.graphics.Color
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
 
+class ItemAdapter2 // Constructor
+    (private val itemList: List<Item2>, private val onItemClickListener: OnItemClickListener?) :
+    RecyclerView.Adapter<ItemAdapter2.ViewHolder>() {
     // Interface for item click listener
-    public interface OnItemClickListener {
-        void onItemClick(int position);
+    fun interface OnItemClickListener {
+        fun onItemClick(position: Int)
     }
 
-    // Constructor
-    public ItemAdapter2(List<Item2> itemList, OnItemClickListener onItemClickListener) {
-        this.itemList = itemList;
-        this.onItemClickListener = onItemClickListener;
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout2, parent, false)
+        return ViewHolder(view)
     }
 
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_layout2, parent, false);
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Item2 item = itemList.get(position);
-        holder.burgerImage.setImageResource(item.getImageResId());
-        holder.burgerName.setText(item.getTitle());
-        holder.burgerPrice.setText(item.getPrice());
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = itemList[position]
+        holder.burgerImage.setImageResource(item.imageResId)
+        holder.burgerName.setText(item.title)
+        holder.burgerPrice.setText(item.price)
 
         // Change the background color of the CardView for the first item
         if (position == 0) {
-            holder.cardView.setCardBackgroundColor(Color.parseColor("#FF0000"));
-            holder.burgerName.setTextColor(Color.WHITE);
-            holder.burgerPrice.setTextColor(Color.WHITE);
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#FF0000"))
+            holder.burgerName.setTextColor(Color.WHITE)
+            holder.burgerPrice.setTextColor(Color.WHITE)
         } else {
-            holder.cardView.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
-            holder.burgerName.setTextColor(Color.GRAY);
-            holder.burgerPrice.setTextColor(Color.GRAY);
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+            holder.burgerName.setTextColor(Color.GRAY)
+            holder.burgerPrice.setTextColor(Color.GRAY)
         }
 
-        ViewGroup.LayoutParams layoutParams = holder.cardView.getLayoutParams();
+        val layoutParams = holder.cardView.layoutParams
 
         if (position == 0) {
-            layoutParams.height = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.selected_card_height); // Set the height to a larger value (e.g., 300dp)
+            layoutParams.height =
+                holder.itemView.context.resources.getDimension(R.dimen.selected_card_height)
+                    .toInt() // Set the height to a larger value (e.g., 300dp)
         } else {
-            layoutParams.height = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.default_card_height); // Set back to default height (220dp)
+            layoutParams.height =
+                holder.itemView.context.resources.getDimension(R.dimen.default_card_height)
+                    .toInt() // Set back to default height (220dp)
         }
-        holder.cardView.setLayoutParams(layoutParams);
+        holder.cardView.layoutParams = layoutParams
 
-        holder.itemView.setOnClickListener(v -> {
-            if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(position);
-            }
-        });
+        holder.itemView.setOnClickListener { v: View? ->
+            onItemClickListener?.onItemClick(position)
+        }
     }
 
-    @Override
-    public int getItemCount() {
-        return itemList.size();
+    override fun getItemCount(): Int {
+        return itemList.size
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView burgerImage;
-        TextView burgerName;
-        TextView burgerPrice;
-        CardView cardView;
-        public ViewHolder(View itemView) {
-            super(itemView);
-            burgerImage = itemView.findViewById(R.id.burgerImage);
-            burgerName = itemView.findViewById(R.id.burgerName);
-            burgerPrice = itemView.findViewById(R.id.burgerPrice);
-            cardView = itemView.findViewById(R.id.burgerCard2);
-        }
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var burgerImage: ImageView = itemView.findViewById(R.id.burgerImage)
+        var burgerName: TextView = itemView.findViewById(R.id.burgerName)
+        var burgerPrice: TextView = itemView.findViewById(R.id.burgerPrice)
+        var cardView: CardView = itemView.findViewById(R.id.burgerCard2)
     }
 }
